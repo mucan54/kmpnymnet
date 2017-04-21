@@ -1,0 +1,36 @@
+Sitenin görsel kýsmýyla ilgili dosyalar web klasöründedir css'ler ve tasarýmda kullanýlan görseller bulunmaktadýr.
+Sitenin yönetim ve denetimle ilgili dosyalarý "2" isimli klasörde bulunmaktadýr. 
+Üye resimleri maðaza resimleri ve ürün resimleri 2 klasöründeki images klasöründe depolanmaktadýr.
+sql.txt dosyasýnda ise sistemin kullandýðý veritabaný bilgileri bulunmaktadýr.
+
+KÖK:
+
+kök/index.php?il= > sitenin giriþ sayfasýdýr ürünleri gösterir ve eðer varsa plaka koduna göre filtreler
+kök/magaza.php?id= > id numarasýna göre maðaza detaylarýný gösterir
+kök/magazalar.php?il= > tüm maðazalarý listeler eðer varsa plaka il bilgisine göre filtreler
+kök/urun.php?id= > Id numarasýna sahip ürüne ait detaylarý listeler
+
+KÖK/2 KLASÖRÜ :
+
+kök/2/index.php > Üye giriþ paneli
+kök/2/uyelik.php > Yeni üye kayýt
+kök/2/ansayfa.php > Üye sayfasý
+
+kök/2/magaza.php?islem=duzenle&id=  > verilen id ye sahip magaza bilgilerini düzenleme
+kök/2/magaza.php?islem=sil&id=    >  verilen id'ye sahip maðazayý siler
+kök/2/magaza_ekle.php  > yeni maðaza ekleme iþlemini görür.
+
+kök/2/urun.php?islem=duzenle&id= > verilen id'ye sahip ürünü görüntüler düzenler kampanya ekler siler
+kök/2/2/urun.php?islem=sil&id=   > verilen id'ye sahip ürünü siler
+kök/2/2/urun_ekle.php  >  yeni ürün ekleme iþlemini görür
+
+kök/2/admin.php > adminin tüm üyeleri görüntleyebildiði sayfadýr
+
+kök/2/admin_islem.php?islem=duzenle&id= > adminin verilen id'ye sahip kullanýcýyý düzenlediði sayfadýr
+kök/2/admin_islem.php?islem=sil&id=   >  adminin verilen id'ye sahip kullanýcýyý sildiði sayfadýr
+
+kök/2/picdemo.php?islem=uye&id=  > islemde belirtilen id'ye sahip islem='uye','magaza' ya da 'urun' ün resmini düzenler
+
+kök/2/baglanti.php > veritabaný baðlantýsý
+kök/2/denetim.php > üye giriþi denetimi
+kök/2/cikis.php > üye çýkýþý

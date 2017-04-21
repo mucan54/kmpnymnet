@@ -1,0 +1,124 @@
+-- phpMyAdmin SQL Dump
+-- version 2.11.4
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generation Time: Apr 10, 2017 at 03:48 AM
+-- Server version: 5.1.57
+-- PHP Version: 5.2.17
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+--
+-- Database: `a5524595_db`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kampanya`
+--
+
+CREATE TABLE `kampanya` (
+  `urunid` int(11) NOT NULL,
+  `acikla` char(200) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `newcost` char(110) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+
+--
+-- Dumping data for table `kampanya`
+--
+
+INSERT INTO `kampanya` VALUES(26, 'Gömlek Alana', '%50 İndirim', 5);
+INSERT INTO `kampanya` VALUES(31, 'Mavi ayakkabı alanlara', '%90 İndirim', 6);
+INSERT INTO `kampanya` VALUES(28, 'Ramazan indirimi', '%50 indirim', 7);
+INSERT INTO `kampanya` VALUES(29, '', '%10', 8);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `magaza`
+--
+
+CREATE TABLE `magaza` (
+  `isim` char(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `id` int(20) NOT NULL AUTO_INCREMENT,
+  `pic` char(50) NOT NULL,
+  `sehir` int(5) NOT NULL,
+  `userid` int(50) NOT NULL,
+  `adres` char(200) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=85 ;
+
+--
+-- Dumping data for table `magaza`
+--
+
+INSERT INTO `magaza` VALUES('MCA Store2', 1, '', 12, 2, 'Aşşağı mahalle2');
+INSERT INTO `magaza` VALUES('J-Club', 66, '', 41, 2, 'Karakolun yanı');
+INSERT INTO `magaza` VALUES('Tuğba', 65, '', 20, 2, 'Merkez Çarşı No.21');
+INSERT INTO `magaza` VALUES('test', 81, '', 0, 5, 'test');
+INSERT INTO `magaza` VALUES('Lokiston', 83, '', 11, 2, 'Aşşağı mahalle');
+INSERT INTO `magaza` VALUES('test', 84, '', 0, 4, 'test');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `urun`
+--
+
+CREATE TABLE `urun` (
+  `storeid` int(20) NOT NULL,
+  `id` int(20) NOT NULL AUTO_INCREMENT,
+  `cost` int(20) NOT NULL,
+  `pic` char(60) NOT NULL,
+  `name` char(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `description` char(250) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `id_2` (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=33 ;
+
+--
+-- Dumping data for table `urun`
+--
+
+INSERT INTO `urun` VALUES(1, 1, 200, '', 'Lacivert Ayakkabı', 'Nike Marka, spor ayakkabı. 40-45 numaralar.');
+INSERT INTO `urun` VALUES(66, 29, 1200, '', 'Tarihi Tablo', 'Osmanlı Zamanından Kalma Medrese Resmi');
+INSERT INTO `urun` VALUES(1, 31, 85, '', 'Daha Mavi Ayakkabı', '40-45 numara');
+INSERT INTO `urun` VALUES(1, 28, 45, '', 'Sarı Gömlek', '%100 pamuk');
+INSERT INTO `urun` VALUES(1, 26, 50, '', 'Yeşil Ceket', 'Yeni Moda');
+INSERT INTO `urun` VALUES(84, 32, 0, '', 'test', 'tets');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `uyeler`
+--
+
+CREATE TABLE `uyeler` (
+  `id` int(20) NOT NULL AUTO_INCREMENT,
+  `name` char(30) NOT NULL,
+  `surname` char(30) NOT NULL,
+  `eposta` char(30) NOT NULL,
+  `kullanici_adi` char(20) NOT NULL,
+  `stores` int(120) NOT NULL,
+  `parola` char(120) CHARACTER SET latin5 COLLATE latin5_bin NOT NULL,
+  `tarih` date NOT NULL,
+  `yetki` int(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+
+--
+-- Dumping data for table `uyeler`
+--
+
+INSERT INTO `uyeler` VALUES(2, 'Ali', 'Ağaoğlu', 'agaoglu@ali.com', 'www', 0, '985bda1a6bf60cbb8960d0397c9b9d39', '2017-03-10', 0);
+INSERT INTO `uyeler` VALUES(3, '', '', 'stest@test.com', 'admin', 0, 'admin', '2017-03-05', 1);
+INSERT INTO `uyeler` VALUES(5, 'test', 'test', 'test@t.com', 'test', 0, 'test', '0000-00-00', 1);
+INSERT INTO `uyeler` VALUES(4, 'sql', 'inject', 'sql@sql.com', 'sql', 0, 'sql', '0000-00-00', 0);
