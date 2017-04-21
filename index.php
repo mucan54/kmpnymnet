@@ -1,91 +1,81 @@
 <?php
-include("./2/baglanti.php");
-$sqlt = mysql_query("SELECT * FROM urun");
-$sqlt2 = mysql_query("SELECT * FROM kampanya");
+session_start();
+ob_start();
+if(isset($_SESSION["giris"]))
+{
+header("Refresh: 0; url= anasayfa.php");
+return;
+}
 ?>
-<!DOCTYPE HTML>
-<html>
-<head>	
-<meta charset="utf-8">
-<title>Kampanyam.Com</title>
-<link href="web/css/style.css" rel="stylesheet" type="text/css" media="all" />
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-9" />
+<title>Giriþ Sayfasý</title>
+<link href="css/stil.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+	<script type="text/javascript">
+$(document).ready(function(){
+	$("#add_err").css('display', 'none', 'important');
+	 $("#button").click(function(){	
+		  username=$("#kullanici_adi").val();
+		  password=$("#parola").val();
+		  $.ajax({
+		   type: "POST",
+		   url: "denetim.php",
+		   data: "kullanici_adi="+username+"&parola="+password,
+		   success: function(html){    
+			if(html=='true')    {
+			 window.location="anasayfa.php";
+			}
+			else    {
+			$("#add_err").css('display', 'inline', 'important');
+			 $("#add_err").html("Yanlýþ Kullanýcý adý ve þifre");
+			}
+		   },
+		   beforeSend:function()
+		   {
+			$("#add_err").css('display', 'inline', 'important');
+			$("#add_err").html("Giriþ Baþarýlý")
+		   }
+		  });
+		return false;
+	});
+});
+	</script>
 </head>
+
 <body>
-<header>
-    <div class="wrap">
-        <div class="logo"><a href="index.html"><img src="web/images/logo.png" alt="" /></a></div>
-        
 
-        <div class="clear"></div>
-		        <li class="menu" id="active"><a href="#">Sehir</a>
-                        <ul>
-                            <li><a href="index.php?il=12">BingÃ¶l</a></li>
-                            <li><a href="index.php?il=41">Kocaeli</a></li>
-                            <li><a href="index.php?il=06">Ankara</a></li>
-                            <li><a href="index.php">TÃ¼rkiye Geneli</a></li>
-             
-                        </ul>
-    </div>
-</header>
-    <div class="wrap">
-        <div class="sidebar">
-                <ul>
-                    <li class="active"><a href="index.php">Ana Sayfa</a></li>
-                    <li><a href="magazalar.php">MaÄŸazalar</a></li>
-                    <li><a href="uye-girisi.html">Uye GiriÅŸi</a></li>
-                </ul>
-            
-        </div>
-            <div class="content">
-               
-              <div class="clear"></div>
-			<?php while($dondur = mysql_fetch_array($sqlt)) {
-				 $il=0;
-				if (empty($_GET)) {
-
-                
-				$sqlt2 = mysql_query("SELECT * FROM kampanya WHERE urunid='".$dondur['id']."'");
-				$kmpny = mysql_fetch_array($sqlt2);  
-				$sqlt3 = mysql_query("SELECT * FROM magaza WHERE id='".$dondur['storeid']."'");
-				$mgz = mysql_fetch_array($sqlt3);  
-			   }
-			   else {
-				   
-				   $il = $_GET["il"];
-				   $sqlt2 = mysql_query("SELECT * FROM kampanya WHERE urunid='".$dondur['id']."'");
-				$kmpny = mysql_fetch_array($sqlt2);  
-				$sqlt3 = mysql_query("SELECT * FROM magaza WHERE id='".$dondur['storeid']."' AND sehir='".$il."'");
-				$mgz_varmi = mysql_num_rows($sqlt3);
-                      if($mgz_varmi > 0)
-					  {$mgz = mysql_fetch_array($sqlt3); } else { continue;}
-			   }
-				
-				?>    
-			            
-                <div class="list2">
-                <div class="preview"><a href="urun.php?id=<?php echo $dondur["id"]; ?>"><img src="2/images/smallurun_<?php echo $dondur['id']; ?>.jpg" height=128px width=180px alt="" /></a>
-				<?php if($kmpny['newcost']!="") {?>
-                <span> <?php echo $kmpny['newcost'];} ?></span></div>
-                <div class="data">
-                    <ul>
-                        <span><a href="urun.php?id=<?php echo $dondur["id"]; ?>"><?php echo $dondur['name']; ?></a></span>
-                        <li><h2>Fiyat : <?php echo $dondur['cost']; ?></h2></li>
-                        <li><?php echo $dondur['description']; ?></li>
-						<li><a href="magaza.php?id=<?php echo $mgz["id"]; ?>">MaÄŸaza : <?php echo $mgz['isim']; ?></a></li>
-
-                    </ul>
-                </div>
-				<div class="clear"></div>
-            </div>
-         
-            <?php } ?>
-               <div class="clear"></div>
-            </div></div>
-    <div class="clear"></div>
-    <footer>
-        <div class="wrap">
-           
-            </div>
-   </footer>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<form name="giris_form" method="post" id="login">
+<table width="300" border="0" align="center" cellpadding="1" cellspacing="1">
+  <tr>
+    <td><div class="err" id="add_err"></div></td>
+    <td class="giris_td"><img src="images/keys.gif" width="81" height="89" /></td>
+  </tr>
+  <tr>
+    <td>Kullanýcý adý:</td>
+    <td><input type="text" name="kullanici_adi" id="kullanici_adi" class="input"/></td>
+  </tr>
+  <tr>
+    <td>Þifre:</td>
+    <td><input type="password" name="parola" id="parola" /></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td><input type="submit" name="gonder" value="Giriþ Yap" class="gonder" id="button" /></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td><a href="uyelik.php">&Uuml;ye Ol</a></td>
+  </tr>
+  </table>
+</form>
 </body>
 </html>

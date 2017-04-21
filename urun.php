@@ -1,291 +1,202 @@
 <?php
 session_start();
 ob_start();
-
-include("./2/baglanti.php");
-
-$sqlurun = mysql_query("SELECT * FROM urun WHERE id=".$_GET["id"]."");
-$urun = mysql_fetch_array($sqlurun);
-$urunid=$urun['id'];
-$storeid=$urun['storeid'];
-$sqlkmpny = mysql_query("SELECT * FROM kampanya WHERE urunid=".$urunid."");
-$kmpny = mysql_fetch_array($sqlkmpny);
-$sqlmgz = mysql_query("SELECT * FROM magaza WHERE id=".$storeid."");
-$mgz = mysql_fetch_array($sqlmgz);
-
-function plaka($num){
-	
-$iller =array("iller" => array("01" => "Adana",
-
-"02" => "Ad&#305;yaman",
-
-"03" => "Afyon",
-
-"04" => "A&#287;r&#305;",
-
-"05" => "Amasya",
-
-"06" => "Ankara",
-
-"07" => "Antalya",
-
-"08" => "Artvin",
-
-"09" => "Ayd&#305;n",
-
-"10" => "Bal&#305;kesir",
-
-"11" => "Bilecik",
-
-"12" => "Bing&#246;l",
-
-"13" => "Bitlis",
-
-"14" => "Bolu",
-
-"15" => "Burdur",
-
-"16" => "Bursa",
-
-"17" => "&#199;anakkale",
-
-"18" => "&#199;ank&#305;r&#305;",
-
-"19" => "&#199;orum",
-
-"20" => "Denizli",
-
-"21" => "Diyarbak&#305;r",
-
-"22" => "Edirne",
-
-"23" => "Elaz&#305;&#287;",
-
-"24" => "Erzincan",
-
-"25" => "Erzurum",
-
-"26" => "Eski&#351;ehir",
-
-"27" => "Gaziantep",
-
-"28" => "Giresun",
-
-"29" => "G&#252;m&#252;&#351;hane",
-
-"30" => "Hakkari",
-
-"31" => "Hatay",
-
-"32" => "Isparta",
-
-"33" => "&#304;&#231;el",
-
-"34" => "&#304;stanbul",
-
-"35" => "&#304;zmir",
-
-"36" => "Kars",
-
-"37" => "Kastamonu",
-
-"38" => "Kayseri",
-
-"39" => "K&#305;rklareli",
-
-"40" => "K&#305;r&#351;ehir",
-
-"41" => "Kocaeli",
-
-"42" => "Konya",
-
-"43" => "K&#252;tahya",
-
-"44" => "Malatya",
-
-"45" => "Manisa",
-
-"46" => "K.mara&#351;",
-
-"47" => "Mardin",
-
-"48" => "Mu&#287;la",
-
-"49" => "Mu&#351;",
-
-"50" => "Nev&#351;ehir",
-
-"51" => "Ni&#287;de",
-
-"52" => "Ordu",
-
-"53" => "Rize",
-
-"54" => "Sakarya",
-
-"55" => "Samsun",
-
-"56" => "Siirt",
-
-"57" => "Sinop",
-
-"58" => "Sivas",
-
-"59" => "Tekirda&#287;",
-
-"60" => "Tokat",
-
-"61" => "Trabzon",
-
-"62" => "Tunceli",
-
-"63" => "&#350;anl&#305;urfa",
-
-"64" => "U&#351;ak",
-
-"65" => "Van",
-
-"66" => "Yozgat",
-
-"67" => "Zonguldak",
-
-"68" => "Aksaray",
-
-"69" => "Bayburt",
-
-"70" => "Karaman",
-
-"71" => "K&#305;r&#305;kkale",
-
-"72" => " Batman",
-
-"73" => "&#350;&#305;rnak",
-
-"74" => "Bart&#305;n",
-
-"75" => "Ardahan",
-
-"76" => "I&#287;d&#305;r",
-
-"77" => "Yalova",
-
-"78" => "Karab&#252;k",
-
-"79" => "Kilis",
-
-"80" => "Osmaniye",
-
-"81" => "D&#252;zce",
-
-"0" => "Undefined"
-));
-$iladi= $iller["iller"][$num];
-return $iladi;
+// sayfaya eri&#351;im yapan ki&#351;inin admin yetkisini kontrol ediyoruz
+if(!isset($_SESSION["giris"]))
+{
+echo str_repeat("<br>", 8)."<center><img src=images/hata.gif border=0 />Bu sayfay&#305; g&#246;r&#252;nt&#252;lemek i&#231;in giri&#351; yapmal&#305;s&#305;n&#305;z.</center>";
+header("Refresh: 2; url= index.php");
+return;
+}
+//hata vermemesi i&#231;in i&#351;lem sat&#305;r&#305; bo&#351;sa
+
+$islem = $_GET["islem"];
+$id = $_GET["id"];
+
+include("baglanti.php");
+
+//kullan&#305;c&#305; bilgileri al&#305;n&#305;yor
+$sorgula2 = mysql_query("SELECT * FROM uyeler WHERE kullanici_adi='".$_COOKIE["kullanici_adi"]."' and parola='".$_COOKIE["parola"]."'") or die (mysql_error());
+$uyeler = mysql_fetch_array($sorgula2);  
+$asd=$uyeler['id'];
+
+$sorgula3 = mysql_query("SELECT * FROM urun WHERE id='".$id."'") or die (mysql_error());
+$urun = mysql_fetch_array($sorgula3);
+$dsa=$urun['storeid'];
+
+//ma&#287;aza bilgileri al&#305;n&#305;yor
+$sorgula = mysql_query("SELECT * FROM magaza WHERE id='".$dsa."'") or die (mysql_error());
+$magaza = mysql_fetch_array($sorgula);
+
+//d&#252;zenlenen ma&#287;azan&#305;n &#252;yeye ait olup olmad&#305;&#287;&#305;na bak&#305;l&#305;yor
+if($magaza['userid'] != $asd&&!isset($_SESSION["yetki"]))
+{
+	echo str_repeat("<br>", 8)."<center><img src=images/hata.gif border=0 />Bu sayfay&#305; g&#246;r&#252;nt&#252;lemek i&#231;in izniniz yok.</center>";
+header("Refresh: 2; url= index.php");
+return;
 }
 
+//Ma&#287;aza ve ma&#287;azaya ait t&#252;m &#252;r&#252;nleri Sil
+if($islem=="sil")
+{
+
+$urun_sil = "DELETE FROM urun WHERE id='$id'";
+$sil_sonuc = mysql_query($urun_sil);	
+
+$kampanya_sil = "DELETE FROM kampanya WHERE urunid='$id'";
+$sil_sonuc2 = mysql_query($kampanya_sil);	
+
+echo str_repeat("<br>",8)."<center><img src=images/ok.gif border=0 /> &#220;r&#252;n Silindi.</center>";
+header("Refresh: 1; url= magaza.php?islem=duzenle&id=$dsa");
+return;
+}
+
+//Bilgileri G&#252;ncelle
+else
+{
+
+
+$chc=$magaza['id'];
+$sqlt = mysql_query("SELECT * FROM urun WHERE storeid='$chc'");
+$mid=$magaza['id'];
+$dosya = "images/smallurun_".$id.".jpg";
+
+$sqlt2 = mysql_query("SELECT * FROM kampanya WHERE urunid='$id'");
+$kim=mysql_fetch_array($sqlt2);
 ?>
-<!DOCTYPE HTML>
-<html>
-<head>	
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
 <meta charset="utf-8">
-<title>Kampanyam.Com</title>
-<link href="web/css/style.css" rel="stylesheet" type="text/css" media="all" />
+<title>Kontrol Paneli</title>
+<link href="css/stil.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+$('#aktif').change(function(){
+   $("#newcost").prop("disabled", !$(this).is(':checked'));
+   $("#descs").prop("disabled", !$(this).is(':checked'));
+});
+</script>
 </head>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 <body>
-<header>
-    <div class="wrap">
-        <div class="logo"><a href="index.html"><img src="web/images/logo.png" alt="" /></a></div>
-       
-        
-        <div class="clear"></div>
-    </div>
-</header>
-    <div class="wrap">
-        <div class="sidebar">
-                <ul>
-                    <li class="active"><a href="index.php">Ana Sayfa</a></li>
-                    <li><a href="magazalar.php">Mağazalar</a></li>
-                    <li><a href="uye-girisi.html">Uye Girisi</a></li>
-                    
-                </ul>
-            
-        </div>
-            <div class="content">
-                
-            <div class="details-grid">
-        
-				<h3><a href="#"><?php echo $urun['name']; ?></a></h3>
-                            <div class="video-preview">
-                                <a href="#"><img src="2/images/urun_<?php echo $urun["id"]; ?>.jpg" alt="" /></a>
-                            </div>
-                            <div class="v-details-data">
-                                <div class="row">
-                                    <div class="col"></div><div class="col"><span><h3>Fiyat:<?php echo $urun['cost']; ?></h3></span></div>
-                                </div>
-								<div class="row">
-                                    <div class="col"></div><?php echo $urun['description']; ?>
-                                </div>
-								    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-                                <div class=" row">
-                                    <div class="col">Mağaza</div><div class="col"><?php echo $mgz['isim']; ?></div>
-                                </div>
-                                <div class=" row">
-                                    <div class="col">Adres</div><div class="col"><?php echo $mgz['adres']; ?>  <?php echo plaka($mgz['sehir']); ?></div>
-                                </div>
-
-                                
-                            </div>
-                        <div class="clear"></div>
-				
-            <div class="clear"></div>
-			<div class="ring-grid">
-                <div class="preview">
-                <a href="#"><img src="web/images/ring.png" alt="" /></a></div>
-                <div class="data"><a href="#"><?php echo $kmpny['newcost']; ?></a></div>
-                <div class="tags">
-                        <ul>
-                           <?php echo $kmpny['acikla']; ?>
-                        </ul>
-                    </div></div>
-			
-			<div class="grid">
-                <div class="preview">
-                <a href="magaza.php?id=<?php echo $mgz['id']; ?>"><img src="2/images/smallmagaza_<?php echo $mgz['id']; ?>.jpg" alt="" /></a></div>
-                <div class="data"><a href="magaza.php?id=<?php echo $mgz['id']; ?>"><?php echo $mgz['isim']; ?></a></div>
-                <div class="love">				 
-                <div class=" row">
-                <div class="rating" style="width:68%;"></div>
-                </div>   </div> </div>
-                 
-                <div class="clear"></div>
-                </div>
-            </div>
-        </div>
-		
-    </div> 
-             <div class="clear"></div>
- 
-	
-						
-						
-
-                    </ul>
-                </div>
-				<div class="clear"></div>
-            
-         
-          
-               <div class="clear"></div>
-            </div></div>
-    <div class="clear"></div>
-    <footer>
+<form name="guncelle" method="post" action="urun.php?islem=duzenle&id=<?php echo $urun['id']; ?>">
+<table align="center" width="300" border="0" cellspacing="2" cellpadding="2">
+  <tr>
+    <td height="62"><img src="images/uye.png" width="32" height="32" /> <a href="magaza.php?islem=duzenle&id=<?php echo $mid; ?>">Geri</a></td>
+    <td height="62" align="right">&nbsp;</td>
+  </tr>
+                      
+  <tr>
+    <td> Resim <a href="picdemo.php?islem=urun&id=<?php echo $urun['id']; ?>"target=_blank>Ekle/Sil</a>
+	  <?php $picd=$urun['id']; $yol="images/smallurun_".$picd.".jpg";; if (file_exists($yol)) { ?></td>
+	<td><img src="images/smallurun_<?php echo $picd; ?>.jpg"></td>
+	 <?php } else { ?>
+	 <td><img src="images/nopic.png" height="70px" width="70px"></td> <?php } ?>
+	 </tr>
+    <td width="114">&#220;r&#252;n ad&#305;:</td>
+    <td width="179"><input type="text" name="isim" value="<?php echo $urun['name']; ?>"  /></td>
+   <tr>
+    <td width="114">A&#231;&#305;klama:</td>
+    <td width="179"><input type="text" name="desc" value="<?php echo $urun['description']; ?>"  /></td>
+  </tr>
+   <tr>
+    <td width="114">Fiyat:</td>
+    <td width="179"><input type="text" name="cost" value="<?php echo $urun['cost']; ?>"  /></td>
+  </tr>
      
-   </footer>
+  <tr>
+    <td>&nbsp;</td>
+    <td><input type="submit" name="button" value="G&#252;ncelle" /></td>
+  </tr>
+  <tr>
+
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+ </tr>
+  <?php 
+  $kmpny_kontrol = mysql_query("select * from kampanya where urunid='".$id."'") or die (mysql_error());
+
+$kmpny_varmi = mysql_num_rows($kmpny_kontrol);
+if($kmpny_varmi > 0)
+{ ?> <td>Kampanya Aktif<input type="checkbox" class="check" id="aktif" name="aktif" checked></td> <?php } else {
+?> <td>Kampanya Aktif<input type="checkbox" class="check" id="aktif" name="aktif"></td> <?php } ?>
+  </body><body>
+
+  <tr>
+	    <td><b><u>&#304;ndirim</u></b></td>
+			    <td><b><u>Kampanya A&#231;&#305;klamas&#305;</u></b></td>
+					    
+
+  </tr>
+
+
+
+    <td width="179"><input type="text" id="newcost" name="newcost" value="<?php echo $kim['newcost']; ?>"  /></td>
+    <td width="179"><input type="text" id="descs" name="descs" value="<?php echo $kim['acikla']; ?>"  /></td>
+                            
+</table></form> 
 </body>
-</html>
-<?php
+<?php 
+
+
+	 
+if($_SERVER['REQUEST_METHOD'] == "POST")
+{
+	
+$g_id = $_GET["id"];
+$g_name = $_POST["isim"];
+$g_desc = $_POST["desc"];	
+$g_cost = $_POST["cost"];
+
+$g_newcost = $_POST["newcost"];	
+$g_descs = $_POST["descs"];
+
+$yenikayitt = "Update kampanya Set newcost='$g_newcost', acikla='$g_descs'  Where urunid='$g_id'";
+//$yenikayitt = "INSERT INTO kampanya (newcost, acikla, urunid)values('$g_newcost', '$g_descs', '$g_id')";
+
+$sorguu = mysql_query($yenikayitt);
+
+if(isset($_POST['aktif'])) { // checkbox seçilmişse "on" değeri gönderiliyor
+    $kmpny_kontrol = mysql_query("select * from kampanya where urunid='".$id."'") or die (mysql_error());
+
+$kmpny_varmi = mysql_num_rows($kmpny_kontrol);
+if($kmpny_varmi > 0)
+	{	
+	$yenikayitt = "Update kampanya Set newcost='$g_newcost', acikla='$g_descs'  Where urunid='$g_id'"; 
+	$sorguu = mysql_query($yenikayitt);
+	}
+else {
+	$yenikayitt = "INSERT INTO kampanya (newcost, acikla, urunid)values('$g_newcost', '$g_descs', '$g_id')";
+
+	$sorguu = mysql_query($yenikayitt);
+	}
+} else { // seçilmemişse bu değer sayfaya hiç gönderilmiyor
+    $kmpny_sil = "DELETE FROM kampanya WHERE urunid='$id'";
+    $sil_sonuc = mysql_query($kmpny_sil);	
+}
+
+
+$guncelle = mysql_query("Update urun Set name='$g_name', description='$g_desc', cost='$g_cost' Where id='$g_id'");
+
+	if($guncelle)
+	{
+	
+	echo "<center><img src=images/ok.gif border=0 /> Bilgileriniz G&#252;ncellendi.</center>";
+
+	header("Refresh: 0; url= urun.php?islem=duzenle&id=$g_id");
+
+	}
+	else
+	{
+
+	echo "<center><img src=images/hata.gif border=0 /> Bilgileriniz g&#252;ncellenmedi!</center>";
+
+	header("Refresh: 2; url= urun.php?islem=duzenle&id=$g_id");
+
+	}
+}
 
 mysql_close();
 ob_end_flush();	
-?>
+}?>
