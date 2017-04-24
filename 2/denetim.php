@@ -12,8 +12,8 @@ include("baglanti.php");
 $kullanici_adi = htmlentities(mysql_real_escape_string($_POST["kullanici_adi"]));
 $parola = md5(md5(htmlentities(mysql_real_escape_string($_POST["parola"]))));
 
-//$sorgula = mysql_query("SELECT * FROM uyeler WHERE kullanici_adi='{$kullanici_adi}' and parola='{$parola}'") or die (mysql_error());
-$sorgula = mysql_query("SELECT * FROM uyeler WHERE kullanici_adi='$kullanici_adi' and parola='$parola'") or die (mysql_error());
+$sorgula = mysql_query("SELECT * FROM uyeler WHERE kullanici_adi='{$kullanici_adi}' and parola='{$parola}'") or die (mysql_error());
+//$sorgula = mysql_query("SELECT * FROM uyeler WHERE kullanici_adi='$kullanici_adi' and parola='$parola'") or die (mysql_error());
 $uye_varmi = mysql_num_rows($sorgula);
 if($uye_varmi > 0)
 {
