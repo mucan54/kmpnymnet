@@ -11,7 +11,7 @@ return;
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-9" />
-<title>Giriş Sayfası</title>
+<title>GiriÃ¾ SayfasÃ½</title>
 <link href="css/stil.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
 	<script type="text/javascript">
@@ -30,13 +30,13 @@ $(document).ready(function(){
 			}
 			else    {
 			$("#add_err").css('display', 'inline', 'important');
-			 $("#add_err").html("Yanlış Kullanıcı adı ve şifre");
+			 $("#add_err").html("YanlÃ½Ã¾ KullanÃ½cÃ½ adÃ½ ve Ã¾ifre");
 			}
 		   },
 		   beforeSend:function()
 		   {
 			$("#add_err").css('display', 'inline', 'important');
-			$("#add_err").html("Giriş Başarılı")
+			$("#add_err").html("GiriÃ¾ BaÃ¾arÃ½lÃ½")
 		   }
 		  });
 		return false;
@@ -56,16 +56,16 @@ $(document).ready(function(){
     <td class="giris_td"><img src="images/keys.gif" width="81" height="89" /></td>
   </tr>
   <tr>
-    <td>Kullanıcı adı:</td>
-    <td><input type="text" name="kullanici_adi" id="kullanici_adi" class="input"/></td>
+    <td>KullanÃ½cÃ½ adÃ½:</td>
+    <td><input type="text" name="kullanici_adi" id="kullanici_adi" class="input" autocomplete="on"/></td>
   </tr>
   <tr>
-    <td>Şifre:</td>
+    <td>Ãifre:</td>
     <td><input type="password" name="parola" id="parola" /></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
-    <td><input type="submit" name="gonder" value="Giriş Yap" class="gonder" id="button" /></td>
+    <td><input type="submit" name="gonder" value="GiriÃ¾ Yap" class="gonder" id="button" /></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
