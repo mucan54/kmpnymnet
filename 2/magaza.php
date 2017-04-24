@@ -99,7 +99,7 @@ $dosya = "images/smallmagaza_".$id.".jpg";
 <td><div class="err" id="add_err"></div></td>
 			  </tr>
 	<tr>		  <td width="114">İşlem:</td>
-				<td width="114"><?php echo htmlentities($islem); ?></td>
+				<td width="114"><?php echo $islem; ?></td>
 	</tr><tr>
     <td width="114">Ma&#287;aza ad&#305;:</td>
     <td width="179"><input type="text" name="isim" value="<?php echo $magaza['isim']; ?>"  /></td>
