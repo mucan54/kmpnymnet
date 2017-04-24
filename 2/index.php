@@ -57,7 +57,7 @@ $(document).ready(function(){
   </tr>
   <tr>
     <td>Kullanýcý adý:</td>
-    <td><input type="text" name="kullanici_adi" id="kullanici_adi" class="input" autocomplete="on"/></td>
+    <td><input type="text" name="kullanici_adi" id="kullanici_adi" class="input" autocomplete="off"/></td>
   </tr>
   <tr>
     <td>Þifre:</td>
